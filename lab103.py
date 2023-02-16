@@ -1,7 +1,8 @@
 import httpx
 from prefect import flow, task
 from prefect.blocks.system import Secret
-from prefect.tasks import task_input_hash
+
+# from prefect.tasks import task_input_hash
 
 secret_block = Secret.load("alpha-vantage")
 
@@ -9,7 +10,7 @@ secret_block = Secret.load("alpha-vantage")
 secret_block.get()
 
 
-@task(cache_key_fn=task_input_hash)
+@task()
 def get_data(symbol="IBM", interval="5min"):
     url = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={symbol}&interval={interval}&apikey={secret_block}"
     response = httpx.get(url)
